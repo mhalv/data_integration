@@ -151,6 +151,7 @@ def one_step_oauth_request(coach, target_url):
 def data_to_csv(target_dir, data_to_write, desired_name):
     """Convenience function to write a dict to CSV with appropriate parameters."""
     #generate directory if doesn't exist
+    global d
     if len(data_to_write) == 0:
         return None
     if not os.path.exists(target_dir):
@@ -272,7 +273,7 @@ def get_student_badges(coach_email, list_of_students, skip_list):
                     'count': 0
                 }
                 #API only returns user badges if badge is owned
-                if badge['is_owned'] == True:
+                if badge['is_owned']:
                     try:
                         int_dict['count'] = len(badge['user_badges'])
                         #iterate over user badges and store date & context
