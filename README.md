@@ -69,5 +69,139 @@ khan_script.py
 
 If you've got questions submit an issue here on git, or email me at amartin at teamschools dot org
 
+#### Sample output
+````
+C:\Python27\python.exe Z:/khan/khan_school/get_khan_data_temp.py
+1. COACHES:
+	A. Reading coaches.txt in dir oauth_khan....
+	B. Verifying OAuth setup for each coach in coaches.txt
+		Verifying coach fake_teacher_1@gmail.com 
+		Verifying coach fake_teacher_2@gmail.com 
+	C. Finished reading coaches.txt in dir oauth_khan.
+
+2. GLOBAL DATA:
+	A.	Retrieving a list of current badges from http://www.khanacademy.org/api/v1/badges
+	B.	Wrote all badges to khan_data/badge_metadata.csv
+
+3. STUDENT DATA:
+	A.	Pulling student list for coach fake_teacher_1@gmail.com
+		fake_teacher_1@gmail.comcoaches 181 students
+
+	B.	Assembling student details for fake_teacher_1@gmail.com's students
+		Student, Fake (336245 points)
+
+	C.	Getting student *badge* data for fake_teacher_1@gmail.com's students
+		fake_student_1@teamstudents.org
+
+	D.	Getting student *exercise* totals for fake_teacher_1@gmail.com's students
+		fake_student_1@teamstudents.org
+
+	A.	Pulling student list for coach fake_teacher_2@gmail.com 
+		fake_teacher_2@gmail.com coaches 102 students
+
+	B.	Assembling student details for mrdempsey.rise@gmail.com's students
+		Skipping fake_student_1@teamstudents.org who has already been evaluated
+
+	C.	Getting student *badge* data for mrdempsey.rise@gmail.com's students
+		fake_student_1@teamstudents.org
+		Skipping fake_student_1@teamstudents.org who has already been evaluated
+
+	D.	Getting student *exercise* totals for mrdempsey.rise@gmail.com's students
+		fake_student_1@teamstudents.org
+		Skipping fake_student_1@teamstudents.org who has already been evaluated
+
+4. EXAMINE DATA:
+	A.	coach_students
+[{'coach': 'fake_teacher_1@gmail.com',
+  'student': 'fake_student_1@teamstudents.org'},
+ {'coach': 'mrdempsey.rise@gmail.com', 'student': 'fake_student_1@teamstudents.org'},
+ {'coach': 'travisdempsey@gmail.com', 'student': 'fake_student_1@teamstudents.org'}]
+
+	B.	composite_badges
+[{'count': 1,
+  'owned': True,
+  'slug': 'act-i-scene-i',
+  'student': 'fake_student_1@teamstudents.org'},
+ {'count': 3,
+  'owned': True,
+  'slug': 'awesome-streak',
+  'student': 'fake_student_1@teamstudents.org'},
+ {'count': 3,
+  'owned': True,
+  'slug': 'going-supersonic',
+  'student': 'fake_student_1@teamstudents.org'}]
+
+	C.	composite_exercises
+[{'exercise': 'addition_1',
+  'last_done': u'2014-02-06T17:20:48Z',
+  'level': 'mastery3',
+  'longest_streak': 35,
+  'mastered': True,
+  'maximum_exercise_progress_dt': u'2013-09-18T20:18:28Z',
+  'practiced': True,
+  'practiced_date': None,
+  'proficient': True,
+  'proficient_date': u'2013-06-25T13:40:23Z',
+  'progress': 1.0,
+  'streak': 10,
+  'struggling': False,
+  'student': u'fake_student_1@teamstudents.org',
+  'total_corrrect': 82,
+  'total_done': 88},
+ {'exercise': 'cas-ecosystem-function',
+  'last_done': None,
+  'level': 'unstarted',
+  'longest_streak': 0,
+  'mastered': False,
+  'maximum_exercise_progress_dt': None,
+  'practiced': False,
+  'practiced_date': None,
+  'proficient': False,
+  'proficient_date': 0,
+  'progress': 0.0,
+  'streak': 0,
+  'struggling': False,
+  'student': u'fake_student_1@teamstudents.org',
+  'total_corrrect': 0,
+  'total_done': 0},
+ {'exercise': 'cas-ecosystem-services',
+  'last_done': None,
+  'level': 'unstarted',
+  'longest_streak': 0,
+  'mastered': False,
+  'maximum_exercise_progress_dt': None,
+  'practiced': False,
+  'practiced_date': None,
+  'proficient': False,
+  'proficient_date': 0,
+  'progress': 0.0,
+  'streak': 0,
+  'struggling': False,
+  'student': u'fake_student_1@teamstudents.org',
+  'total_corrrect': 0,
+  'total_done': 0}]
+
+	D.	badge_detail
+[{'context': 'None',
+  'date_earned': u'2013-07-28T19:30:31Z',
+  'slug': 'act-i-scene-i',
+  'student': 'fake_student_1@teamstudents.org'},
+ {'context': 'Congruent segments',
+  'date_earned': u'2013-11-10T03:30:10Z',
+  'slug': 'awesome-streak',
+  'student': 'fake_student_1@teamstudents.org'},
+ {'context': 'Angle types',
+  'date_earned': u'2013-07-09T14:38:36Z',
+  'slug': 'awesome-streak',
+  'student': 'fake_student_1@teamstudents.org'}]
+
+5. WRITE COMBINED FILES
+
+6. UPLOAD TO DB
+Finished!!%
+
+Process finished with exit code 0
+````
+
 # diy
 Pulls down student activity from the diy.org website.
