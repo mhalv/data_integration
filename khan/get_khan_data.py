@@ -316,7 +316,7 @@ def get_composite_exercises(coach_email, list_of_students, skip_list):
         print '\t\t%s' % student.decode("utf-8")
         #don't call student results twice if they are coached by 2x teachers
         if student in skip_list:
-            print 'Skipping %s who has already been evaluated' % student.decode("utf-8")
+            print '\t\t\tSkipping %s who has already been evaluated' % student.decode("utf-8")
             continue
         stu_exercise_url = '%s?email=%s' % (khan_exercises_url, student)
         api_req = one_step_oauth_request(coach_email, stu_exercise_url)
@@ -420,6 +420,7 @@ def main():
         print
         print "\tD.\tGetting student *exercise* totals for %s's students" % coach
         get_composite_exercises(coach, roster, already_fetched)
+        print
 
         #indicate that all the students have been evaluated (prevent dupes)
         already_fetched.extend(roster)
