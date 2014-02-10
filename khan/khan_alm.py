@@ -408,7 +408,7 @@ def main():
         # now we have a list of students.
         #we want to hand that list of students to all of the API pulls
         #TESTING ONLY
-        roster = roster[0:1]
+        #roster = roster[0:1]
 
         print
         print "\tB.\tAssembling student details for %s's students" % coach
