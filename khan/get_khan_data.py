@@ -408,6 +408,7 @@ def main():
         print "\t\t%s coaches %s students" % (coach, len(roster))
         # now we have a list of students.
         #we want to hand that list of students to all of the API pulls
+        roster = roster[0:6]
         print
         print "\tB.\tAssembling student details for %s's students" % coach
         get_student_details(coach, roster, already_fetched)
@@ -427,16 +428,16 @@ def main():
     print "4. EXAMINE DATA:"
 
     print '\tA.\tcoach_students'
-    pprint(coach_students[0:5])
+    pprint(coach_students[0:3])
     print
     print '\tB.\tcomposite_badges'
-    pprint(composite_badges[0:5])
+    pprint(composite_badges[0:3])
     print
     print '\tC.\tcomposite_exercises'
-    pprint(composite_exercises[0:5])
+    pprint(composite_exercises[0:3])
     print
     print '\tD.\tbadge_detail'
-    pprint(badge_detail[0:5])
+    pprint(badge_detail[0:3])
 
     print
     print "5. WRITE COMBINED FILES"
