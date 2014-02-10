@@ -6,23 +6,31 @@
 If you don't know much about the Khan API, start with the web-based [API explorer] (http://api-explorer.khanacademy.org/) and the [wiki] (https://github.com/Khan/khan-api/wiki/Khan-Academy-API).
 
 
-There are two main files here: `oauth_khan/create_oauth.py' and 'get_khan_data.py'.  They handle the two basic things that you want to do with the API: *get authenticated* and *get student data*.
+There are two main files here: `oauth_khan/create_oauth.py' and 'get_khan_data.py'.  They handle the two basic things that you want to do with the API: **get authenticated** and **get student data**.
 
 'get_khan_data.py' is the workhorse file.  For all authenticated coaches (more on that below) it iterates over the students they coach and spits back data into .csv files for easy uploading to your database, or for importing into R/Tableau/Excel etc.  
 
 it returns:
-1. badge_metadata
-  generic info about each badge that a student can earn on the Khan site.  This data is not unique to your students.
-2. composite_badges
-  a simple listing of badge, student, earned T/F, and count of times earned
-3. composite_exercises
-  top level stats about every exercise/objective, including mastered T/F, problems done, date proficient, etc.
-4. badge_detail
-  a listing of every badge earned, date, and (if applicable) why the badge was earned
-5. stu_detail
-  total points, seconds of video watched, badge counts, coach and username details
-6. coach_students
-  coach/student value pairs that tell you which coaches coach each student.  the script will only pull a student's data once (even if they have multiple coaches) but coach/students will help you rebuild rosters of who coaches whom.
+
+1. **badge_metadata**
+
+   generic info about each badge that a student can earn on the Khan site.  This data is not unique to your students.
+2. **composite_badges**
+
+   a simple listing of badge, student, earned T/F, and count of times earned
+3. **composite_exercises**
+
+   top level stats about every exercise/objective, including mastered T/F, problems done, date proficient, etc.
+4. **badge_detail**
+
+   a listing of every badge earned, date, and (if applicable) why the badge was earned
+5. **stu_detail**
+
+   total points, seconds of video watched, badge counts, coach and username details
+6. **coach_students**
+
+   coach/student value pairs that tell you which coaches coach each student.  the script will only pull a student's data once (even if they have multiple coaches) but coach/students will help you rebuild rosters of who coaches whom.
+
 
 
 'create_oauth.py' handles the configuration steps in the OAuth authentication flow process.  [OAuth] (http://developer.chrome.com/extensions/tut_oauth.html) is an authentication protocol that gives a secure way to grant access to certain data without exposing your password.  If you've ever clicked the 'Log in with Google/Facebook' button on a webpage, you've used OAuth.
@@ -62,3 +70,4 @@ khan_script.py
 If you've got questions submit an issue here on git, or email me at amartin at teamschools dot org
 
 # diy
+Pulls down student activity from the diy.org website.
