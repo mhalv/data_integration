@@ -408,7 +408,6 @@ def main():
         print "\t\t%s coaches %s students" % (coach, len(roster))
         # now we have a list of students.
         #we want to hand that list of students to all of the API pulls
-        roster = roster[0:6]
         print
         print "\tB.\tAssembling student details for %s's students" % coach
         get_student_details(coach, roster, already_fetched)
