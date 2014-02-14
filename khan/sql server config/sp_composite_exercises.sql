@@ -8,7 +8,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-CREATE PROCEDURE [dbo].[sp_KhanCompositeExercises] AS 
+ALTER PROCEDURE [dbo].[sp_KhanCompositeExercises] AS 
 BEGIN
 
 		--0. ensure temp table doesn't exist
@@ -33,7 +33,7 @@ BEGIN
       ,[longest_streak]
       ,[progress]
       ,[practiced_date]
-      ,[total_corrrect]
+      ,[total_correct]
       ,[struggling]
       ,[exercise]
       ,CASE WHEN [proficient_date] = '0' THEN NULL ELSE [proficient_date] END AS proficient_date
