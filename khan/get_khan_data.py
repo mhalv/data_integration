@@ -183,7 +183,7 @@ def get_students(coach):
         parsed_resp = r.json()
         #iterate over response, extract emails, and append to list
         for i in parsed_resp:
-            list_of_students.append(i['key_email'])
+            list_of_students.append(i['user_id'])
     else:
         print "bad response: " + str(r.status_code)
     return list_of_students
@@ -199,7 +199,7 @@ def get_student_details(coach_email, list_of_students, skip_list):
             print '\t\tSkipping %s who has already been evaluated' % student.decode("utf-8")
             continue
         #build request
-        stu_url = '%s?email=%s' % (khan_user_url, student)
+        stu_url = '%s?userId=%s' % (khan_user_url, student)
         api_req = one_step_oauth_request(coach_email, stu_url)
         r = requests.get(api_req.to_url())
         #if response is valid, build a dict of key fields
@@ -255,7 +255,7 @@ def get_student_badges(coach_email, list_of_students, skip_list):
         if student in skip_list:
             print '\t\t\tSkipping %s who has already been evaluated' % student.decode("utf-8")
             continue
-        stu_badge_url = '%s?email=%s' % (khan_badges_url, student)
+        stu_badge_url = '%s?userId=%s' % (khan_badges_url, student)
         api_req = one_step_oauth_request(coach_email, stu_badge_url)
         r = requests.get(api_req.to_url())
         if r.status_code == requests.codes.ok:
@@ -318,7 +318,7 @@ def get_composite_exercises(coach_email, list_of_students, skip_list):
         if student in skip_list:
             print '\t\t\tSkipping %s who has already been evaluated' % student.decode("utf-8")
             continue
-        stu_exercise_url = '%s?email=%s' % (khan_exercises_url, student)
+        stu_exercise_url = '%s?userId=%s' % (khan_exercises_url, student)
         api_req = one_step_oauth_request(coach_email, stu_exercise_url)
         r = requests.get(api_req.to_url())
         if r.status_code == requests.codes.ok:
