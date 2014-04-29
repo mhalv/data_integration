@@ -460,6 +460,10 @@ def main():
         get_composite_exercises(coach, roster, already_fetched)
         print
 
+        print
+        print "\tE.\tGetting exercise state changes for %s's students" % coach
+        get_exercise_states(coach, roster, already_fetched)
+
         #indicate that all the students have been evaluated (prevent dupes)
         already_fetched.extend(roster)
 
