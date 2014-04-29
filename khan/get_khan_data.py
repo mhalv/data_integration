@@ -11,6 +11,7 @@ import pyodbc
 
 khan_user_url = "http://www.khanacademy.org/api/v1/user"
 khan_exercises_url = "http://www.khanacademy.org/api/v1/user/exercises"
+khan_exercise_states_url = "http://www.khanacademy.org/api/v1/user/exercises/progress_changes"
 khan_students_url = "http://www.khanacademy.org/api/v1/user/students"
 khan_badges_url = "http://www.khanacademy.org/api/v1/badges"
 
@@ -20,6 +21,7 @@ stu_details = []
 composite_badges = []
 badge_detail = []
 composite_exercises = []
+exercise_states = []
 
 #to access the Khan API you register a consumer key
 #this is at the level of the 'application'/organization - unlike the oauth flow
@@ -288,6 +290,7 @@ def get_student_badges(coach_email, list_of_students, skip_list):
                             }
                             stu_list_detail.append(int_detail_dict)
                     except Exception, e:
+                        print e
                         int_dict['count'] = 1
                     #append to student dict
                     stu_list.append(int_dict)
@@ -354,6 +357,42 @@ def get_composite_exercises(coach_email, list_of_students, skip_list):
             )
 
 
+def get_exercise_states(coach_email, list_of_students, skip_list):
+    """Gets exercise state changes for every student/exercise"""
+    counter = 0
+    for student in list_of_students:
+        print '\t\t%s' % student.decode("utf-8")
+        #don't call student results twice if they are coached by 2x teachers
+        if student in skip_list:
+            print 'Skipping %s who has already been evaluated' % student.decode("utf-8")
+            continue
+        stu_states_url = '%s?userId=%s' % (khan_exercise_states_url, student)
+        api_req = one_step_oauth_request(coach_email, stu_states_url)
+        r = requests.get(api_req.to_url())
+        if r.status_code == requests.codes.ok:
+            stu_list = []
+            resp = r.json()
+            for ex_st in resp:
+                change_dict = dict([(str(k), v) for k, v in ex_st.items()])
+                int_dict = {
+                    'student': student,
+                    'exercise': str(change_dict['exercise_name']),
+                    'date': change_dict['date'],
+                    'change_type': change_dict['kind'],
+                    'exercise_status': change_dict['to_progress']['level'],
+                    'mastery_flag': change_dict['to_progress']['mastered']
+                }
+                stu_list.append(int_dict)
+            exercise_states.extend(stu_list)
+            #write data file to directory (not necessary)
+            data_to_csv(
+                target_dir="%s/%s/%s" % (DATA_DIR, slugify_user(coach_email), slugify_user(student)),
+                data_to_write=stu_list,
+                desired_name='exercise_states'
+            )
+            counter += 1
+
+
 def collapse_dict(dictionary):
     """Some Khan responses have lists nested in the dictionary.  Collapse them into strings.
         ex: ['graphing_points','area_of_parallelograms','axis_of_symmetry']
@@ -381,7 +420,7 @@ def main():
         print "\t\tVerifying coach %s " % coach
         ##Check if this user even has an oauth token directory
         try:
-            coach_tokens = __import__("%s.%s.tokens" % (OAUTH_DIR, slugify_user(coach)), fromlist=["tokens"])
+            __import__("%s.%s.tokens" % (OAUTH_DIR, slugify_user(coach)), fromlist=["tokens"])
             verified_coaches.append(coach)
         except Exception, e:
             print """\t\tCouldn't find oauth tokens for %s!\n\t
@@ -443,29 +482,34 @@ def main():
     print "5. WRITE COMBINED FILES"
 
     data_to_csv(
-        target_dir="%s" % (DATA_DIR),
+        target_dir="%s" % DATA_DIR,
         data_to_write=coach_students,
         desired_name='coach_students'
     )
     data_to_csv(
-        target_dir="%s" % (DATA_DIR),
+        target_dir="%s" % DATA_DIR,
         data_to_write=composite_badges,
         desired_name='composite_badges'
     )
     data_to_csv(
-        target_dir="%s" % (DATA_DIR),
+        target_dir="%s" % DATA_DIR,
         data_to_write=composite_exercises,
         desired_name='composite_exercises'
     )
     data_to_csv(
-        target_dir="%s" % (DATA_DIR),
+        target_dir="%s" % DATA_DIR,
         data_to_write=badge_detail,
         desired_name='badge_detail'
     )
     data_to_csv(
-        target_dir="%s" % (DATA_DIR),
+        target_dir="%s" % DATA_DIR,
         data_to_write=stu_details,
         desired_name='stu_detail'
+    )
+    data_to_csv(
+        target_dir="%s" % DATA_DIR,
+        data_to_write=exercise_states,
+        desired_name='exercise_states'
     )
 
     print
