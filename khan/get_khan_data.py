@@ -523,8 +523,15 @@ def main():
     f = open("C:/data_robot/logistical/nardo_secret.txt", "r")
     secret = f.read()
 
+    #upload
     conn = pyodbc.connect(driver='{SQL Server}', server='WINSQL01\NARDO', database='DIY', uid='sa', pwd=secret)
     conn.execute("exec msdb.dbo.sp_start_job N'Khan | Load Data'")
+    conn.commit()
+    conn.close()
+
+    #calcs (do as distinct session)
+    conn = pyodbc.connect(driver='{SQL Server}', server='WINSQL01\NARDO', database='DIY', uid='sa', pwd=secret)
+    conn.execute("exec msdb.dbo.sp_start_job N'Khan | Static Calc Refresh'")
     conn.commit()
     conn.close()
 
