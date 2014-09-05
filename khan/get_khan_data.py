@@ -334,7 +334,7 @@ def get_composite_exercises(coach_email, list_of_students, skip_list):
                     'exercise': str(ex_dict['exercise']),
                     'maximum_exercise_progress_dt': ex_dict['maximum_exercise_progress_dt'],
                     'streak': ex_dict['streak'],
-                    'progress': ex_dict['progress'],
+                    'progress': ex_dict['exercise_progress'],
                     'practiced_date': ex_dict['practiced_date'],
                     'proficient_date': ex_dict['proficient_date'],
                     'total_done': ex_dict['total_done'],
