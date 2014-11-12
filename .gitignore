@@ -39,3 +39,9 @@ nosetests.xml
 /khan/oauth_khan/mark_andrew_joseph_gmail_com
 /khan/khan_data
 /khan/oauth_khan/*
+
+#config
+*.config
+
+#st math data
+/st_math/st_data/*
