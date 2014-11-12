@@ -9,7 +9,7 @@ This script
 (viii) saves the resulting data frame as a csv,
 (vii)  connects to Silo instance,
 (viii) call a SQL Server Agent job that runs a stored procedure to upsert/merge the csv,
-(ix)   close the sql server and sft connections.
+(ix)   close the sql server and sftp connections.
 """
 # Import modules
 
@@ -21,6 +21,7 @@ import pysftp
 import ConfigParser as cp
 import os
 import dateutil.parser as dparser
+import pyodbc
 
 if __name__ == "__main__":
     print("Loading ST Math configuration file")
@@ -36,7 +37,7 @@ if __name__ == "__main__":
 
     local_path = os.getcwd()
 
-    local_path = local_path + "\\st_data\\"
+    local_path = local_path + "\\raw_data\\"
 
     remote_path = "Progress Completion Reports 2014-2015"
 
@@ -53,26 +54,31 @@ if __name__ == "__main__":
     for f in progress_files:
         progress_dates[f] = dparser.parse(f, fuzzy=True)
 
-    file_0 = str(progress_dates.keys()[0])
-    date_0 = progress_dates[file_0]
-
     print("Reading csv into data frames and appending week ending date column")
     def csv_to_df_MAP_Progress(file_dir, file_name, file_date):
         st_df = pd.read_csv(file_dir + "\\" + file_name )
         st_df['week_ending_date']=file_date
         return st_df
 
-    test_df = csv_to_df_MAP_Progress(local_path, file_0, date_0)
-
-    out_df=pd.DataFrame()# instantiate empty data frame
+    out_df=pd.DataFrame() #instantiate empty data frame
     for i, f in enumerate(progress_dates):
-        #print(str(f) + str(progress_dates[str(f)]))
         out_part = csv_to_df_MAP_Progress(local_path, str(f), progress_dates[str(f)])
-        print(out_part.head())
         out_df = pd.concat([out_df, out_part], ignore_index=True)
     print("Data Frames concatenated!")
 
-    out_path = local_path + 'progress.csv'
+    out_path = os.getcwd() + '\\for_nardo\\progress.csv'
 
     print("Writing data frame to " + out_path)
     out_df.to_csv(out_path, index=False)
+
+    print "Loading to DB"
+    #get credential
+    f = open("C:/data_robot/logistical/nardo_secret.txt", "r")
+    secret = f.read()
+
+    #upload
+    conn = pyodbc.connect(driver='{SQL Server}', server='WINSQL01\NARDO',
+        database='STMath', uid='sa', pwd=secret)
+    conn.execute("exec msdb.dbo.sp_start_job N'STMath | Load Data'")
+    conn.commit()
+    conn.close()

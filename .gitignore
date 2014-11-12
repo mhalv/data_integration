@@ -44,4 +44,5 @@ nosetests.xml
 *.config
 
 #st math data
-/st_math/st_data/*
+/st_math/raw_data/*
+/st_math/for_nardo/*
