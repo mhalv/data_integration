@@ -14,6 +14,7 @@ khan_exercises_url = "http://www.khanacademy.org/api/v1/user/exercises"
 khan_exercise_states_url = "http://www.khanacademy.org/api/v1/user/exercises/progress_changes"
 khan_students_url = "http://www.khanacademy.org/api/v1/user/students"
 khan_badges_url = "http://www.khanacademy.org/api/v1/badges"
+khan_exercise_metadata_url = "http://www.khanacademy.org/api/v1/exercises"
 
 #global lists to catch output
 coach_students = []
@@ -103,6 +104,57 @@ def get_badges():
             w.writerow(i)
         f.close()
     print "\tB.\tWrote all badges to %s/badge_metadata.csv" % DATA_DIR
+
+
+def get_exercises():
+    """Hits the main exercises url, processes a list of dicts, and writes to csv"""
+    print "\tC.\tRetrieving a list of current exercises from %s" % khan_exercise_metadata_url
+    parsed_exer_list = requests.get(khan_exercise_metadata_url).json()
+    parsed_exer_result = process_exer_metadata(parsed_exer_list)
+
+    #write to csv
+    with open("%s/exer_metadata.csv" % DATA_DIR, 'wb') as f:
+        w = csv.DictWriter(f, parsed_exer_result[0].keys(), dialect='ALM')
+        w.writeheader()
+        for i in parsed_exer_result:
+            w.writerow(i)
+        f.close()
+    print "\tD.\tWrote all badges to %s/exer_metadata.csv" % DATA_DIR
+
+def process_exer_metadata(exer_list):
+    """preps /api/v1/exercises for db"""
+    clean_exer_list = []
+    for exer in exer_list:
+        #convert to ascii string
+        exer = dict([(unicode(k).encode("utf-8"), unicode(v).encode("utf-8")) for k, v in exer.items()])
+        #just desired fields
+        inner_dict = {
+            'author_name': exer['author_name']
+           ,'creation_date': exer['creation_date']
+           ,'deleted': exer['deleted']
+           ,'description': exer['description']
+           ,'global_id': exer['global_id']
+           ,'image_url': exer['image_url']
+           ,'is_quiz': exer['is_quiz']
+           ,'ka_url': exer['ka_url']
+           ,'kind': exer['kind']
+           ,'name': exer['name']
+           ,'pretty_display_name': exer['pretty_display_name']
+           ,'summative': exer['summative']
+           ,'title': exer['title']
+           ,'tracking_document_url': exer['tracking_document_url']
+           ,'tutorial_only': exer['tutorial_only']
+           ,'v_position': exer['v_position']
+        }
+        #wtf, some dictionaries are missing keys?  sigh.
+        if 'do_not_publish' in exer:
+            inner_dict['do_not_publish'] = exer['do_not_publish']
+        else:
+            inner_dict['do_not_publish'] = None
+
+        clean_exer_list.append(inner_dict)
+
+    return clean_exer_list
 
 
 def process_badge_metadata_list(badge_list):
@@ -434,6 +486,8 @@ def main():
     print "2. GLOBAL DATA:"
     #all khan badges
     get_badges()
+
+    get_exercises()
 
     print
     print "3. STUDENT DATA:"
