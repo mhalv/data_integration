@@ -37,6 +37,7 @@ nosetests.xml
 
 *.idea
 /khan/oauth_khan/
+/khan/oauth_khan/coaches.txt
 /khan/khan_data
 
 
