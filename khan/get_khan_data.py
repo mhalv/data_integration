@@ -134,6 +134,7 @@ def process_exer_metadata(exer_list):
            ,'deleted': exer['deleted']
            ,'description': exer['description']
            ,'global_id': exer['global_id']
+           ,'id': exer['id']
            ,'image_url': exer['image_url']
            ,'is_quiz': exer['is_quiz']
            ,'ka_url': exer['ka_url']
