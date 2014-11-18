@@ -4,8 +4,8 @@ import csv
 #csv format
 csv.register_dialect('ALM', delimiter=',', quoting=csv.QUOTE_ALL)
 
-#url = 'http://www.khanacademy.org/api/v1/topictree'
-url = 'http://www.khanacademy.org/api/v1/topic/math'
+url = 'http://www.khanacademy.org/api/v1/topictree'
+#url = 'http://www.khanacademy.org/api/v1/topic/math'
 #url = 'http://www.khanacademy.org/api/v1/topic/cc-eighth-grade-math'
 #url = 'http://www.khanacademy.org/api/v1/topic/cc-8th-numbers-operations'
 #url = 'http://www.khanacademy.org/api/v1/topic/basic-geo-special-right-triangle'
@@ -100,6 +100,8 @@ def record_skill_props(skill_meta, skill_dict):
     final_dict['id'] = skill_dict['id']
     final_dict['url'] = skill_dict['url']
 
+    final_dict = dict([(unicode(k).encode("utf-8"), unicode(v).encode("utf-8")) for k, v in final_dict.items()])
+
     #print(final_dict)
     master_skills.append(final_dict)
     return None
@@ -109,9 +111,8 @@ parse_topics(foo)
 
 #print master_skills
 
-with open("topic_metadata.csv", 'wb') as f:
+with open("khan_data/topic_metadata.csv", 'wb') as f:
     #character encoding, sigh.
-    master_skills = dict([(unicode(k).encode("utf-8"), unicode(v).encode("utf-8")) for k, v in master_skills.items()])
     w = csv.DictWriter(f, sorted(master_skills[0].keys()), dialect='ALM')
     w.writeheader()
     for i in master_skills:
