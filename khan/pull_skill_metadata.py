@@ -4,17 +4,15 @@ import csv
 #csv format
 csv.register_dialect('ALM', delimiter=',', quoting=csv.QUOTE_ALL)
 
-#url = 'http://www.khanacademy.org/api/v1/topictree'
-url = 'http://www.khanacademy.org/api/v1/topic/math'
+url = 'http://www.khanacademy.org/api/v1/topictree'
+#url = 'http://www.khanacademy.org/api/v1/topic/math'
 #url = 'http://www.khanacademy.org/api/v1/topic/cc-eighth-grade-math'
 #url = 'http://www.khanacademy.org/api/v1/topic/cc-8th-numbers-operations'
 #url = 'http://www.khanacademy.org/api/v1/topic/basic-geo-special-right-triangle'
 
 khan_tree = requests.get(url).json()
 
-#globals
-global_depth = 0
-
+#global dict to record recursion tree
 skill = {
     0: None,
     1: None,
@@ -70,18 +68,6 @@ def parse_topics(tree, parent='start'):
         else:
             #print '\t\t\tchild is NOT a topic.  Parse it!'
 
-            #find where we are in the tree and record it
-            # for n in range(0, 6):
-            #     if skill[n] == parent:
-            #         skill[n+1] == i['node_slug']
-
-            #clean out anything bigger than global depth before calling
-            # for n in range(0, 6):
-            #     if n > global_depth:
-            #         skill[n] = None
-
-            #print skill
-
             record_skill_props(
               skill_meta=skill,
               skill_dict=i
@@ -90,7 +76,6 @@ def parse_topics(tree, parent='start'):
 
 def record_skill_props(skill_meta, skill_dict):
     #everything from meta, that tracks the parent levels
-    #final_dict = skill_meta
     final_dict = {}
     for k, v in skill_meta.items():
         final_dict[k]=v
@@ -113,7 +98,6 @@ def record_skill_props(skill_meta, skill_dict):
 master_skills = []
 parse_topics(khan_tree)
 
-#print master_skills
 
 with open("khan_data/topic_metadata.csv", 'wb') as f:
     #character encoding, sigh.
