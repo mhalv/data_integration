@@ -287,7 +287,7 @@ def get_student_details(coach_email, list_of_students, skip_list):
                 'username': resp_dict['username'].encode('ascii', 'ignore')
             }
             #find @teamstudents email in list of all authorized emails and add to dictionary
-            identity_email = [str(x) for x in resp_dict['normalized_auth_emails'] if x.endswith("@teamstudents.org")]
+            identity_email = [str(x) for x in resp_dict['auth_emails'] if x.endswith("@teamstudents.org")]
             inner_dict['identity_email'] = ', '.join(map(str, identity_email))
             #store data - append to global list
             stu_details.append(inner_dict)
