@@ -430,8 +430,9 @@ def get_exercise_states(coach_email, list_of_students, skip_list):
                 int_dict = {
                     'student': student,
                     'exercise': str(change_dict['exercise_name']),
-                    'date': change_dict['date'],
-                    'change_type': change_dict['kind'],
+                    'date': change_dict['date'],	
+					'change_type': None,
+                    #we COULD grab the 'from' here, as well.  right now we only need 'to'.					
                     'exercise_status': change_dict['to_progress']['level'],
                     'mastery_flag': change_dict['to_progress']['mastered']
                 }
