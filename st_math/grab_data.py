@@ -39,7 +39,7 @@ if __name__ == "__main__":
 
     local_path = local_path + "\\raw_data\\"
 
-    remote_path = "Progress Completion Reports 2014-2015"
+    remote_path = "ProgressCompletionReports"
 
     print("Downloading ST Math Progress Files")
     with pysftp.Connection(host, username=username, password=password) as sftp:
